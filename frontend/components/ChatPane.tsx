@@ -155,7 +155,7 @@ export function ChatPane({
             alt=""
             width={24}
             height={24}
-            className="w-6 h-6 rounded-lg shadow-[0_0_14px_rgba(250,204,21,0.4)]"
+            className="w-6 h-6 rounded-lg"
           />
           <span className="text-[13px] font-bold tracking-tight text-slate-900 dark:text-slate-50">
             NammaNomNom
