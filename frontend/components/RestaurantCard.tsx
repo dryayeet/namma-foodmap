@@ -5,10 +5,10 @@ import clsx from "clsx";
 import type { Restaurant } from "@/lib/types";
 
 const CATEGORY_CHIP: Record<string, string> = {
-  trending:   "bg-amber-500/15 text-amber-300 border-amber-400/30",
-  overhyped:  "bg-red-500/15 text-red-300 border-red-400/30",
-  underrated: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
-  neutral:    "bg-white/5 text-slate-400 border-white/10",
+  trending:   "bg-amber-500/15 text-amber-700 border-amber-500/40 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-400/30",
+  overhyped:  "bg-red-500/15 text-red-700 border-red-500/40 dark:bg-red-500/15 dark:text-red-300 dark:border-red-400/30",
+  underrated: "bg-emerald-500/15 text-emerald-700 border-emerald-500/40 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-400/30",
+  neutral:    "bg-slate-900/5 text-slate-500 border-slate-900/10 dark:bg-white/5 dark:text-slate-400 dark:border-white/10",
 };
 
 export function RestaurantCard({
@@ -31,14 +31,14 @@ export function RestaurantCard({
       className={clsx(
         "w-full text-left rounded-xl border p-3 transition-all",
         active
-          ? "bg-white/10 border-amber-400/40 ring-1 ring-amber-400/30"
-          : "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.14]"
+          ? "bg-amber-400/10 border-amber-500/50 ring-1 ring-amber-400/40 dark:bg-white/10 dark:border-amber-400/40 dark:ring-amber-400/30"
+          : "bg-slate-900/[0.03] border-slate-900/10 hover:bg-slate-900/[0.05] hover:border-slate-900/[0.18] dark:bg-white/[0.03] dark:border-white/[0.08] dark:hover:bg-white/[0.06] dark:hover:border-white/[0.14]"
       )}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="font-semibold text-slate-100 truncate">{r.name}</div>
-          <div className="text-[11px] text-slate-400 truncate mt-0.5">
+          <div className="font-semibold text-slate-900 dark:text-slate-100 truncate">{r.name}</div>
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 truncate mt-0.5">
             {r.cuisine ?? "—"} · {r.area ?? "Bengaluru"} · {"$".repeat(r.price_tier)}
           </div>
         </div>
@@ -51,10 +51,10 @@ export function RestaurantCard({
           {r.hype_category}
         </span>
       </div>
-      <div className="mt-2 flex items-center gap-3 text-[11px] text-slate-400">
+      <div className="mt-2 flex items-center gap-3 text-[11px] text-slate-600 dark:text-slate-400">
         <span>🔥 {r.mention_count}</span>
         <span className="text-slate-500">· sentiment {r.avg_sentiment.toFixed(2)}</span>
-        <span className="ml-auto font-semibold text-slate-200">
+        <span className="ml-auto font-semibold text-slate-900 dark:text-slate-200">
           {r.hype_score.toFixed(2)}
         </span>
       </div>

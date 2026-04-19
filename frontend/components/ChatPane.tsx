@@ -73,39 +73,39 @@ export function ChatPane() {
     return (
       <button
         onClick={() => setCollapsed(false)}
-        className="absolute top-1/2 right-0 -translate-y-1/2 z-[1001] bg-slate-950/92 backdrop-blur-xl border-y border-l border-white/[0.09] rounded-l-xl px-3 py-4 shadow-[0_10px_48px_rgba(0,0,0,0.55)] hover:bg-slate-900/95 transition group"
+        className="absolute top-1/2 right-0 -translate-y-1/2 z-[1001] bg-white/92 dark:bg-slate-950/92 backdrop-blur-xl border-y border-l border-slate-900/10 dark:border-white/[0.09] rounded-l-xl px-3 py-4 shadow-[0_10px_48px_rgba(15,23,42,0.18)] dark:shadow-[0_10px_48px_rgba(0,0,0,0.55)] hover:bg-slate-50/95 dark:hover:bg-slate-900/95 transition group"
         aria-label="Open Ask NammaNomNom"
       >
         <div className="flex flex-col items-center gap-2 [writing-mode:vertical-rl] rotate-180">
           <span className="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">
             Ask NammaNomNom
           </span>
-          <span className="text-amber-400 text-sm">✨</span>
+          <span className="text-amber-500 dark:text-amber-400 text-sm">✨</span>
         </div>
       </button>
     );
   }
 
   return (
-    <aside className="absolute top-0 right-0 z-[1001] h-screen w-[440px] max-w-[90vw] bg-slate-950/92 backdrop-blur-xl border-l border-white/[0.09] shadow-[0_10px_48px_rgba(0,0,0,0.55)] flex flex-col">
-      <header className="px-5 pt-5 pb-4 border-b border-white/[0.06]">
+    <aside className="absolute top-0 right-0 z-[1001] h-screen w-[440px] max-w-[90vw] bg-white/92 dark:bg-slate-950/92 backdrop-blur-xl border-l border-slate-900/10 dark:border-white/[0.09] shadow-[0_10px_48px_rgba(15,23,42,0.18)] dark:shadow-[0_10px_48px_rgba(0,0,0,0.55)] flex flex-col">
+      <header className="px-5 pt-5 pb-4 border-b border-slate-900/5 dark:border-white/[0.06]">
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-gradient-to-br from-amber-300 to-amber-500 text-slate-950 text-[11px] font-bold shadow-[0_0_14px_rgba(250,204,21,0.4)]">
             ✨
           </span>
-          <h2 className="text-base font-bold tracking-tight text-slate-50">
+          <h2 className="text-base font-bold tracking-tight text-slate-900 dark:text-slate-50">
             Ask NammaNomNom
           </h2>
           <button
             onClick={() => setCollapsed(true)}
-            className="ml-auto text-slate-500 hover:text-slate-200 text-sm w-6 h-6 flex items-center justify-center rounded-md hover:bg-white/10"
+            className="ml-auto text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 text-sm w-6 h-6 flex items-center justify-center rounded-md hover:bg-slate-900/10 dark:hover:bg-white/10"
             aria-label="Collapse chat"
             title="Collapse"
           >
             ›
           </button>
         </div>
-        <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
+        <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
           Powered by Claude Haiku 4.5 · grounded in the community dataset.
         </p>
       </header>
@@ -123,19 +123,19 @@ export function ChatPane() {
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex gap-2 items-center text-slate-400 text-xs pl-1"
+              className="flex gap-2 items-center text-slate-500 dark:text-slate-400 text-xs pl-1"
             >
               <span className="flex gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse [animation-delay:120ms]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse [animation-delay:240ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse [animation-delay:120ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse [animation-delay:240ms]" />
               </span>
               <span className="text-slate-500">Thinking…</span>
             </motion.div>
           )}
         </AnimatePresence>
         {error && (
-          <div className="text-[11px] text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+          <div className="text-[11px] text-red-700 dark:text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
             {error}
           </div>
         )}
@@ -151,7 +151,7 @@ export function ChatPane() {
               <button
                 key={s}
                 onClick={() => send(s)}
-                className="text-[11px] text-left px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-slate-300 hover:bg-white/[0.08] hover:text-slate-100 transition"
+                className="text-[11px] text-left px-2.5 py-1.5 rounded-lg bg-slate-900/[0.04] dark:bg-white/[0.04] border border-slate-900/10 dark:border-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-900/[0.08] dark:hover:bg-white/[0.08] hover:text-slate-900 dark:hover:text-slate-100 transition"
               >
                 {s}
               </button>
@@ -160,7 +160,7 @@ export function ChatPane() {
         </div>
       )}
 
-      <div className="px-4 py-3 border-t border-white/[0.06]">
+      <div className="px-4 py-3 border-t border-slate-900/5 dark:border-white/[0.06]">
         <div className="relative">
           <textarea
             value={input}
@@ -168,18 +168,18 @@ export function ChatPane() {
             onKeyDown={onKeyDown}
             rows={2}
             placeholder="Ask about routes, cuisines, dishes…"
-            className="w-full resize-none text-sm pl-3 pr-10 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-slate-100 placeholder-slate-500 focus:bg-white/[0.06] focus:border-amber-400/40 focus:ring-2 focus:ring-amber-400/20 focus:outline-none transition"
+            className="w-full resize-none text-sm pl-3 pr-10 py-2.5 rounded-lg bg-slate-900/[0.04] dark:bg-white/[0.04] border border-slate-900/10 dark:border-white/[0.08] text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:bg-slate-900/[0.06] dark:focus:bg-white/[0.06] focus:border-amber-500/50 dark:focus:border-amber-400/40 focus:ring-2 focus:ring-amber-400/20 focus:outline-none transition"
           />
           <button
             onClick={() => send(input)}
             disabled={!input.trim() || loading}
-            className="absolute right-2 bottom-2 w-7 h-7 rounded-md bg-amber-400 text-slate-950 font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-amber-300 transition flex items-center justify-center"
+            className="absolute right-2 bottom-2 w-7 h-7 rounded-md bg-amber-500 dark:bg-amber-400 text-white dark:text-slate-950 font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-amber-400 dark:hover:bg-amber-300 transition flex items-center justify-center"
             aria-label="Send"
           >
             →
           </button>
         </div>
-        <div className="text-[10px] text-slate-600 mt-1.5 flex justify-between">
+        <div className="text-[10px] text-slate-500 dark:text-slate-600 mt-1.5 flex justify-between">
           <span>Enter to send · Shift+Enter for newline</span>
           {messages.length > 1 && (
             <button
@@ -187,7 +187,7 @@ export function ChatPane() {
                 setMessages([WELCOME]);
                 setError(null);
               }}
-              className="text-slate-500 hover:text-slate-300"
+              className="text-slate-500 hover:text-slate-900 dark:hover:text-slate-300"
             >
               Clear
             </button>
@@ -211,8 +211,8 @@ function MessageBubble({ message }: { message: ChatMessage }) {
         className={clsx(
           "max-w-[90%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed",
           isUser
-            ? "bg-amber-400 text-slate-950 font-medium rounded-br-sm"
-            : "bg-white/[0.05] text-slate-100 border border-white/[0.08] rounded-bl-sm"
+            ? "bg-amber-500 text-white dark:bg-amber-400 dark:text-slate-950 font-medium rounded-br-sm"
+            : "bg-slate-900/[0.04] text-slate-900 border border-slate-900/10 dark:bg-white/[0.05] dark:text-slate-100 dark:border-white/[0.08] rounded-bl-sm"
         )}
       >
         {isUser ? (
@@ -223,10 +223,10 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             components={{
               p: ({ node, ...p }) => <p className="mb-2 last:mb-0" {...p} />,
               strong: ({ node, ...p }) => (
-                <strong className="font-semibold text-amber-200" {...p} />
+                <strong className="font-semibold text-amber-700 dark:text-amber-200" {...p} />
               ),
               em: ({ node, ...p }) => (
-                <em className="italic text-slate-300" {...p} />
+                <em className="italic text-slate-700 dark:text-slate-300" {...p} />
               ),
               ul: ({ node, ...p }) => (
                 <ul className="list-disc pl-5 space-y-1 mb-2 last:mb-0" {...p} />
@@ -234,15 +234,15 @@ function MessageBubble({ message }: { message: ChatMessage }) {
               ol: ({ node, ...p }) => (
                 <ol className="list-decimal pl-5 space-y-1 mb-2 last:mb-0" {...p} />
               ),
-              li: ({ node, ...p }) => <li className="text-slate-200" {...p} />,
+              li: ({ node, ...p }) => <li className="text-slate-800 dark:text-slate-200" {...p} />,
               code: ({ node, ...p }) => (
                 <code
-                  className="bg-slate-800/80 text-amber-200 px-1 py-0.5 rounded text-[11px]"
+                  className="bg-slate-200 text-amber-700 dark:bg-slate-800/80 dark:text-amber-200 px-1 py-0.5 rounded text-[11px]"
                   {...p}
                 />
               ),
               a: ({ node, ...p }) => (
-                <a className="text-amber-300 hover:underline" {...p} />
+                <a className="text-amber-600 dark:text-amber-300 hover:underline" {...p} />
               ),
             }}
           >

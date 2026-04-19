@@ -5,6 +5,7 @@ import L from "leaflet";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import type { Restaurant } from "@/lib/types";
 import { HeatmapLayer } from "./HeatmapLayer";
+import type { Theme } from "@/lib/theme";
 
 const CATEGORY_COLOR: Record<string, string> = {
   trending: "#f59e0b",
@@ -40,25 +41,27 @@ function pinIntensity(r: Restaurant): number {
   }
 }
 
-function pinIcon(r: Restaurant) {
+function pinIcon(r: Restaurant, theme: Theme) {
   const color = CATEGORY_COLOR[r.hype_category] ?? CATEGORY_COLOR.neutral;
   const intensity = pinIntensity(r);
   const size = Math.round(14 + intensity * 10); // 14..24 px
   const pct = Math.round(intensity * 100);
-  const fill = `color-mix(in srgb, ${color} ${pct}%, #0b1220)`;
+  const mixBase = theme === "dark" ? "#0b1220" : "#f8fafc";
+  const fill = `color-mix(in srgb, ${color} ${pct}%, ${mixBase})`;
   const glowAlpha = Math.round(intensity * 90)
     .toString(16)
     .padStart(2, "0");
   const glowRadius = Math.round(6 + intensity * 16);
+  const ringShadow =
+    theme === "dark"
+      ? "0 0 0 1px rgba(0,0,0,0.6),0 3px 10px rgba(0,0,0,0.55)"
+      : "0 0 0 1px rgba(15,23,42,0.15),0 3px 10px rgba(15,23,42,0.18)";
 
   const style = [
     `width:${size}px`,
     `height:${size}px`,
     `background:${fill}`,
-    `box-shadow:` +
-      `0 0 ${glowRadius}px ${color}${glowAlpha},` +
-      `0 0 0 1px rgba(0,0,0,0.6),` +
-      `0 3px 10px rgba(0,0,0,0.55)`,
+    `box-shadow:0 0 ${glowRadius}px ${color}${glowAlpha},${ringShadow}`,
   ].join(";");
 
   return L.divIcon({
@@ -86,10 +89,12 @@ function ZoomAwareLayers({
   restaurants,
   showHeatmap,
   onMarkerClick,
+  theme,
 }: {
   restaurants: Restaurant[];
   showHeatmap: boolean;
   onMarkerClick?: (r: Restaurant) => void;
+  theme: Theme;
 }) {
   const map = useMap();
   const [zoom, setZoom] = useState<number>(map.getZoom());
@@ -111,15 +116,15 @@ function ZoomAwareLayers({
       {pinsVisible &&
         restaurants.map((r) => (
           <Marker
-            key={r.id}
+            key={`${r.id}-${theme}`}
             position={[r.lat, r.lng]}
-            icon={pinIcon(r)}
+            icon={pinIcon(r, theme)}
             eventHandlers={{ click: () => onMarkerClick?.(r) }}
           >
             <Popup>
               <div className="min-w-[200px]">
-                <div className="font-semibold text-slate-100">{r.name}</div>
-                <div className="text-[11px] text-slate-400 mb-1.5 mt-0.5">
+                <div className="font-semibold text-slate-900 dark:text-slate-100">{r.name}</div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 mb-1.5 mt-0.5">
                   {r.cuisine ?? "—"} · {r.area ?? ""} · {"$".repeat(r.price_tier)}
                 </div>
                 <div className="text-xs">
@@ -129,7 +134,7 @@ function ZoomAwareLayers({
                   >
                     {r.hype_category}
                   </span>
-                  <span className="text-slate-400">
+                  <span className="text-slate-500 dark:text-slate-400">
                     {" · "}hype {r.hype_score.toFixed(2)}
                   </span>
                 </div>
@@ -149,12 +154,19 @@ export default function MapView({
   focused,
   onMarkerClick,
   showHeatmap,
+  theme,
 }: {
   restaurants: Restaurant[];
   focused: Restaurant | null;
   onMarkerClick?: (r: Restaurant) => void;
   showHeatmap: boolean;
+  theme: Theme;
 }) {
+  const tileUrl =
+    theme === "dark"
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
   return (
     <MapContainer
       center={[12.9716, 77.5946]}
@@ -163,8 +175,9 @@ export default function MapView({
       className="h-screen w-screen"
     >
       <TileLayer
+        key={theme}
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        url={tileUrl}
         subdomains="abcd"
         maxZoom={20}
       />
@@ -172,6 +185,7 @@ export default function MapView({
         restaurants={restaurants}
         showHeatmap={showHeatmap}
         onMarkerClick={onMarkerClick}
+        theme={theme}
       />
       <FlyTo target={focused} />
     </MapContainer>

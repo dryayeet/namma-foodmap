@@ -8,6 +8,7 @@ import type { Filters, Restaurant, Stats } from "@/lib/types";
 import { Sidebar } from "@/components/Sidebar";
 import { HypeLegend } from "@/components/HypeLegend";
 import { ChatPane } from "@/components/ChatPane";
+import { useTheme } from "@/lib/theme";
 
 const MapView = dynamic(() => import("@/components/MapView"), {
   ssr: false,
@@ -22,6 +23,7 @@ export default function Home() {
   const [filters, setFilters] = useState<Filters>({});
   const [focused, setFocused] = useState<Restaurant | null>(null);
   const [showHeatmap, setShowHeatmap] = useState(true);
+  const { theme, toggle: toggleTheme } = useTheme();
 
   const listUrl = api.restaurantsUrl(filters);
   const { data: restaurants = [], isLoading } = useSWR<Restaurant[]>(listUrl, fetcher, {
@@ -41,6 +43,7 @@ export default function Home() {
         focused={focused}
         onMarkerClick={(r) => setFocused(r)}
         showHeatmap={showHeatmap}
+        theme={theme}
       />
       <Sidebar
         restaurants={sortedRestaurants}
@@ -55,6 +58,8 @@ export default function Home() {
       <HypeLegend
         showHeatmap={showHeatmap}
         onToggleHeatmap={() => setShowHeatmap((v) => !v)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
     </main>
   );

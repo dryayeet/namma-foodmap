@@ -7,10 +7,21 @@ export const metadata: Metadata = {
     "Discover where Bengaluru actually eats. Hype-scored restaurants from r/bangalore & r/bengaluru.",
 };
 
+// Runs before React hydrates, so the page paints in the right theme immediately.
+const themeBootstrap = `
+  try {
+    var t = localStorage.getItem('nnn-theme');
+    if (t !== 'light') document.documentElement.classList.add('dark');
+  } catch (e) {
+    document.documentElement.classList.add('dark');
+  }
+`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <link
           rel="preconnect"
           href="https://rsms.me/"
