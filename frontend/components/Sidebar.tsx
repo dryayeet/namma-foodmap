@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import type { Filters, HypeCategory, Restaurant, Stats } from "@/lib/types";
@@ -27,6 +27,11 @@ const HYPE_CHIP_ACTIVE: Record<HypeCategory, string> = {
   neutral:    "bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white",
 };
 
+const MIN_HEIGHT = 140;
+const DEFAULT_HEIGHT = 220;
+const GRID_THRESHOLD = 300;
+const STORAGE_KEY = "nnn-bottom-height";
+
 export function Sidebar({
   restaurants,
   stats,
@@ -45,7 +50,25 @@ export function Sidebar({
   loading: boolean;
 }) {
   const [searchDraft, setSearchDraft] = useState(filters.q ?? "");
-  const cardStripRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState<number>(DEFAULT_HEIGHT);
+  const [dragging, setDragging] = useState(false);
+
+  // Restore persisted height on mount (avoids SSR mismatch by running client-side).
+  useEffect(() => {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const n = Number(raw);
+      if (!Number.isNaN(n)) setHeight(clampHeight(n));
+    }
+  }, []);
+
+  // Persist + reclamp if viewport shrinks below stored value.
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEY, String(height));
+    const onResize = () => setHeight((h) => clampHeight(h));
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [height]);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -66,10 +89,71 @@ export function Sidebar({
     setFilters({ ...filters, q: term });
   };
 
+  const onHandlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+      setDragging(true);
+      const startY = e.clientY;
+      const startHeight = height;
+      const prevSelect = document.body.style.userSelect;
+      const prevCursor = document.body.style.cursor;
+      document.body.style.userSelect = "none";
+      document.body.style.cursor = "ns-resize";
+
+      const onMove = (ev: PointerEvent) => {
+        const delta = startY - ev.clientY;
+        setHeight(clampHeight(startHeight + delta));
+      };
+      const onUp = () => {
+        setDragging(false);
+        document.body.style.userSelect = prevSelect;
+        document.body.style.cursor = prevCursor;
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", onUp);
+      };
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", onUp);
+    },
+    [height]
+  );
+
+  const onHandleDoubleClick = () => setHeight(DEFAULT_HEIGHT);
+
+  const isExpanded = height >= GRID_THRESHOLD;
+
   return (
-    <aside className="absolute bottom-0 left-0 right-0 z-[1001] bg-white/92 dark:bg-slate-950/92 backdrop-blur-xl border-t border-slate-900/10 dark:border-white/[0.09] shadow-[0_-10px_48px_rgba(15,23,42,0.18)] dark:shadow-[0_-10px_48px_rgba(0,0,0,0.55)]">
+    <aside
+      style={{ height }}
+      className="absolute bottom-0 left-0 right-0 z-[1001] flex flex-col bg-white/92 dark:bg-slate-950/92 backdrop-blur-xl border-t border-slate-900/10 dark:border-white/[0.09] shadow-[0_-10px_48px_rgba(15,23,42,0.18)] dark:shadow-[0_-10px_48px_rgba(0,0,0,0.55)]"
+    >
+      {/* Drag handle */}
+      <div
+        onPointerDown={onHandlePointerDown}
+        onDoubleClick={onHandleDoubleClick}
+        role="separator"
+        aria-orientation="horizontal"
+        aria-label="Resize bottom panel"
+        title="Drag to resize · double-click to reset"
+        className={clsx(
+          "shrink-0 h-3 w-full cursor-ns-resize flex items-center justify-center group",
+          dragging && "bg-amber-400/10 dark:bg-amber-400/10"
+        )}
+      >
+        <div
+          className={clsx(
+            "h-1 w-10 rounded-full transition-colors",
+            dragging
+              ? "bg-amber-500 dark:bg-amber-400"
+              : "bg-slate-400/70 dark:bg-slate-600 group-hover:bg-slate-600 dark:group-hover:bg-slate-400"
+          )}
+        />
+      </div>
+
       {/* Row 1: stats + search + filters */}
-      <div className="px-4 pt-3 pb-2 flex items-center gap-3 flex-wrap border-b border-slate-900/5 dark:border-white/[0.06]">
+      <div className="shrink-0 px-4 pt-1 pb-2 flex items-center gap-3 flex-wrap border-b border-slate-900/5 dark:border-white/[0.06]">
         {stats && (
           <div className="flex items-center gap-1.5 shrink-0">
             <Stat label="Places" value={stats.total_restaurants} />
@@ -83,7 +167,7 @@ export function Sidebar({
             value={searchDraft}
             onChange={(e) => setSearchDraft(e.target.value)}
             placeholder="Search cuisine, dish, or area…"
-            className="w-full text-sm pl-9 pr-8 py-2 rounded-full bg-slate-900/[0.04] dark:bg-white/[0.04] border border-slate-900/10 dark:border-white/[0.08] text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:bg-slate-900/[0.06] dark:focus:bg-white/[0.06] focus:border-amber-500/50 dark:focus:border-amber-400/40 focus:ring-2 focus:ring-amber-400/20 focus:outline-none transition"
+            className="w-full text-sm pl-9 pr-8 py-2 rounded-full bg-slate-900/[0.04] dark:bg-white/[0.04] border border-slate-900/10 dark:border-white/[0.08] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400 caret-amber-500 dark:caret-amber-400 focus:bg-slate-900/[0.06] dark:focus:bg-white/[0.06] focus:border-amber-500/50 dark:focus:border-amber-400/40 focus:ring-2 focus:ring-amber-400/20 focus:outline-none transition"
           />
           <svg
             className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"
@@ -162,11 +246,15 @@ export function Sidebar({
         </div>
       </div>
 
-      {/* Row 2: horizontally scrolling cards */}
-      <div className="relative">
+      {/* Card area - fills remaining height, layout switches with panel size */}
+      <div className="flex-1 min-h-0 relative">
         <div
-          ref={cardStripRef}
-          className="flex gap-2 overflow-x-auto scrollbar-thin px-4 py-3"
+          className={clsx(
+            "absolute inset-0 px-4 py-3 scrollbar-thin",
+            isExpanded
+              ? "flex flex-wrap content-start gap-2 overflow-y-auto overflow-x-hidden"
+              : "flex gap-2 overflow-x-auto overflow-y-hidden items-stretch"
+          )}
         >
           {loading && (
             <div className="text-xs text-slate-500 px-1 py-2">Loading…</div>
@@ -183,12 +271,18 @@ export function Sidebar({
             />
           ))}
         </div>
-        <div className="absolute bottom-0 right-4 text-[10px] text-slate-400 dark:text-slate-600 pb-1">
+        <div className="pointer-events-none absolute bottom-1 right-4 text-[10px] text-slate-400 dark:text-slate-600">
           {restaurants.length} results · NammaNomNom v0.1
         </div>
       </div>
     </aside>
   );
+}
+
+function clampHeight(n: number) {
+  if (typeof window === "undefined") return Math.max(MIN_HEIGHT, n);
+  const max = Math.max(MIN_HEIGHT, Math.round(window.innerHeight * 0.8));
+  return Math.min(Math.max(MIN_HEIGHT, n), max);
 }
 
 function Stat({

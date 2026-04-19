@@ -102,7 +102,7 @@ export function ChatPane({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={onKeyDown}
           placeholder="Ask about routes, cuisines, dishes…"
-          className="flex-1 min-w-0 bg-transparent text-sm text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:outline-none"
+          className="flex-1 min-w-0 bg-transparent text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400 caret-amber-500 dark:caret-amber-400 focus:outline-none"
         />
 
         {hasUserMessages && !open && (
@@ -167,7 +167,7 @@ export function ChatPane({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18 }}
-            className="mt-3 rounded-2xl bg-white/95 dark:bg-slate-950/92 backdrop-blur-xl border border-slate-900/10 dark:border-white/[0.09] shadow-[0_20px_60px_rgba(15,23,42,0.18)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden"
+            className="mt-3 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-900/10 dark:border-white/[0.09] shadow-[0_20px_60px_rgba(15,23,42,0.18)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden"
           >
             <div className="flex items-center justify-between px-4 py-2 border-b border-slate-900/5 dark:border-white/[0.06]">
               <span className="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">
@@ -230,7 +230,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
           "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed",
           isUser
             ? "bg-amber-500 text-white dark:bg-amber-400 dark:text-slate-950 font-medium rounded-br-sm"
-            : "bg-slate-900/[0.04] text-slate-900 border border-slate-900/10 dark:bg-white/[0.05] dark:text-slate-100 dark:border-white/[0.08] rounded-bl-sm"
+            : "bg-slate-100 text-slate-900 border border-slate-900/10 dark:bg-slate-800 dark:text-slate-50 dark:border-white/[0.1] rounded-bl-sm"
         )}
       >
         {isUser ? (
