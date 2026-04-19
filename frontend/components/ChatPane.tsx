@@ -149,9 +149,14 @@ export function ChatPane({
       {/* Brand + pill + actions */}
       <div className="flex items-center gap-2.5 bg-white dark:bg-slate-900 rounded-full border border-slate-900/10 dark:border-white/[0.09] shadow-[0_10px_36px_rgba(15,23,42,0.14)] dark:shadow-[0_10px_36px_rgba(0,0,0,0.55)] pl-3.5 pr-1.5 py-1.5">
         <span className="inline-flex items-center gap-1.5 shrink-0 pr-2 border-r border-slate-900/10 dark:border-white/[0.08]">
-          <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-gradient-to-br from-amber-300 to-amber-500 text-slate-950 text-[11px] font-bold shadow-[0_0_14px_rgba(250,204,21,0.4)]">
-            ✨
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/favicon.svg"
+            alt=""
+            width={24}
+            height={24}
+            className="w-6 h-6 rounded-lg shadow-[0_0_14px_rgba(250,204,21,0.4)]"
+          />
           <span className="text-[13px] font-bold tracking-tight text-slate-900 dark:text-slate-50">
             NammaNomNom
           </span>

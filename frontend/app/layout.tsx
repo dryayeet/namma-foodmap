@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "NammaNomNom — Bengaluru's Community-Driven Food Map",
   description:
     "Discover where Bengaluru actually eats. Hype-scored restaurants from r/bangalore & r/bengaluru.",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
 };
 
 // Runs before React hydrates, so the page paints in the right theme immediately.
