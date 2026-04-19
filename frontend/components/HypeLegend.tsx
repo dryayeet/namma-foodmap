@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import clsx from "clsx";
-import type { Theme } from "@/lib/theme";
+import { AnimatePresence, motion } from "framer-motion";
 
 const PIN_ITEMS = [
   { key: "trending",   label: "Trending",   color: "#f59e0b", hint: "Popular & loved" },
@@ -17,91 +18,98 @@ const HEAT_BAR =
 export function HypeLegend({
   showHeatmap,
   onToggleHeatmap,
-  theme,
-  onToggleTheme,
 }: {
   showHeatmap: boolean;
   onToggleHeatmap: () => void;
-  theme: Theme;
-  onToggleTheme: () => void;
 }) {
-  return (
-    <div className="absolute bottom-4 left-[452px] z-[1000] w-64 rounded-xl bg-white/92 dark:bg-slate-950/92 backdrop-blur-xl border border-slate-900/10 dark:border-white/[0.09] shadow-[0_10px_48px_rgba(15,23,42,0.18)] dark:shadow-[0_10px_48px_rgba(0,0,0,0.55)] p-3.5 text-xs space-y-3">
-      <div className="flex items-center justify-between">
-        <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
-          Hype Pins
-        </div>
-        <button
-          onClick={onToggleTheme}
-          className="w-6 h-6 flex items-center justify-center rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-900/10 dark:hover:bg-white/10 transition"
-          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          title={theme === "dark" ? "Light mode" : "Dark mode"}
-        >
-          {theme === "dark" ? <SunIcon /> : <MoonIcon />}
-        </button>
-      </div>
-      <div className="space-y-1.5">
-        {PIN_ITEMS.map((i) => (
-          <div key={i.key} className="flex items-center gap-2">
-            <span
-              className="w-2.5 h-2.5 rounded-full shrink-0 ring-2 ring-white/90 dark:ring-white/90"
-              style={{ background: i.color }}
-            />
-            <span className="font-medium text-slate-800 dark:text-slate-200">{i.label}</span>
-            <span className="text-slate-500 truncate">· {i.hint}</span>
-          </div>
-        ))}
-      </div>
+  const [open, setOpen] = useState(false);
 
-      <div className="border-t border-slate-900/5 dark:border-white/[0.06] pt-3">
-        <div className="flex items-center justify-between gap-2 mb-2">
-          <div>
-            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
-              Hype Density
-            </div>
-            <div className="text-[11px] text-slate-600 dark:text-slate-400 leading-tight">
-              Thermal view
-            </div>
-          </div>
-          <button
-            onClick={onToggleHeatmap}
-            className={clsx(
-              "text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full border transition",
-              showHeatmap
-                ? "bg-amber-500 text-white border-amber-500 dark:bg-amber-400 dark:text-slate-950 dark:border-amber-400 shadow-[0_0_12px_rgba(250,204,21,0.4)]"
-                : "bg-slate-900/[0.04] dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 border-slate-900/10 dark:border-white/[0.1] hover:bg-slate-900/[0.08] dark:hover:bg-white/[0.08]"
-            )}
+  return (
+    <div className="absolute right-4 top-24 z-[1000] flex flex-col items-end gap-2">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-10 h-10 rounded-full bg-white/92 dark:bg-slate-950/92 backdrop-blur-xl border border-slate-900/10 dark:border-white/[0.09] shadow-[0_8px_24px_rgba(15,23,42,0.14)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.5)] flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-900 transition"
+        aria-label="Legend"
+        title="Legend"
+      >
+        <InfoIcon />
+      </button>
+
+      <button
+        onClick={onToggleHeatmap}
+        className={clsx(
+          "w-10 h-10 rounded-full border backdrop-blur-xl flex items-center justify-center transition shadow-[0_8px_24px_rgba(15,23,42,0.14)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.5)]",
+          showHeatmap
+            ? "bg-amber-500 text-white border-amber-500 dark:bg-amber-400 dark:text-slate-950 dark:border-amber-400"
+            : "bg-white/92 dark:bg-slate-950/92 text-slate-700 dark:text-slate-200 border-slate-900/10 dark:border-white/[0.09] hover:bg-white dark:hover:bg-slate-900"
+        )}
+        aria-label={showHeatmap ? "Hide heatmap" : "Show heatmap"}
+        title={showHeatmap ? "Heatmap on" : "Heatmap off"}
+      >
+        <FlameIcon />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 8 }}
+            transition={{ duration: 0.16 }}
+            className="w-64 rounded-xl bg-white/95 dark:bg-slate-950/92 backdrop-blur-xl border border-slate-900/10 dark:border-white/[0.09] shadow-[0_10px_36px_rgba(15,23,42,0.18)] dark:shadow-[0_10px_36px_rgba(0,0,0,0.55)] p-3.5 text-xs space-y-3"
           >
-            {showHeatmap ? "On" : "Off"}
-          </button>
-        </div>
-        <div
-          className="h-2.5 w-full rounded-full ring-1 ring-slate-900/10 dark:ring-white/10"
-          style={{ background: HEAT_BAR }}
-        />
-        <div className="flex justify-between text-[10px] text-slate-500 mt-1.5">
-          <span>Cool</span>
-          <span>Buzzing</span>
-          <span>White-hot</span>
-        </div>
-      </div>
+            <div>
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1.5">
+                Hype Pins
+              </div>
+              <div className="space-y-1.5">
+                {PIN_ITEMS.map((i) => (
+                  <div key={i.key} className="flex items-center gap-2">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0 ring-2 ring-white/90 dark:ring-white/90"
+                      style={{ background: i.color }}
+                    />
+                    <span className="font-medium text-slate-800 dark:text-slate-200">{i.label}</span>
+                    <span className="text-slate-500 truncate">· {i.hint}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-slate-900/5 dark:border-white/[0.06] pt-3">
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1.5">
+                Hype Density
+              </div>
+              <div
+                className="h-2.5 w-full rounded-full ring-1 ring-slate-900/10 dark:ring-white/10"
+                style={{ background: HEAT_BAR }}
+              />
+              <div className="flex justify-between text-[10px] text-slate-500 mt-1.5">
+                <span>Cool</span>
+                <span>Buzzing</span>
+                <span>White-hot</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-function SunIcon() {
+function InfoIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4M12 8h.01" />
     </svg>
   );
 }
 
-function MoonIcon() {
+function FlameIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
     </svg>
   );
 }

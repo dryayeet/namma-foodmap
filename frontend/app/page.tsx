@@ -45,6 +45,11 @@ export default function Home() {
         showHeatmap={showHeatmap}
         theme={theme}
       />
+      <ChatPane theme={theme} onToggleTheme={toggleTheme} />
+      <HypeLegend
+        showHeatmap={showHeatmap}
+        onToggleHeatmap={() => setShowHeatmap((v) => !v)}
+      />
       <Sidebar
         restaurants={sortedRestaurants}
         stats={stats}
@@ -53,13 +58,6 @@ export default function Home() {
         activeId={focused?.id ?? null}
         onSelect={(r) => setFocused(r)}
         loading={isLoading}
-      />
-      <ChatPane />
-      <HypeLegend
-        showHeatmap={showHeatmap}
-        onToggleHeatmap={() => setShowHeatmap((v) => !v)}
-        theme={theme}
-        onToggleTheme={toggleTheme}
       />
     </main>
   );

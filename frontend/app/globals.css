@@ -69,10 +69,9 @@ html.dark .leaflet-control-attribution {
 }
 html.dark .leaflet-control-attribution a { color: #cbd5e1 !important; }
 
-/* Shift the top-left control stack (zoom +/-) out from under the sidebar. */
+/* Push the top-left zoom control down so the centered chat bar has clear air. */
 .leaflet-top.leaflet-left {
-  left: 452px !important;
-  top: 12px !important;
+  top: 96px !important;
 }
 
 .leaflet-control-zoom a {

@@ -25,11 +25,11 @@ export function RestaurantCard({
       layout
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -1 }}
+      whileHover={{ y: -2 }}
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
       onClick={onClick}
       className={clsx(
-        "w-full text-left rounded-xl border p-3 transition-all",
+        "shrink-0 w-[240px] text-left rounded-xl border p-3 transition-all",
         active
           ? "bg-amber-400/10 border-amber-500/50 ring-1 ring-amber-400/40 dark:bg-white/10 dark:border-amber-400/40 dark:ring-amber-400/30"
           : "bg-slate-900/[0.03] border-slate-900/10 hover:bg-slate-900/[0.05] hover:border-slate-900/[0.18] dark:bg-white/[0.03] dark:border-white/[0.08] dark:hover:bg-white/[0.06] dark:hover:border-white/[0.14]"
@@ -44,16 +44,16 @@ export function RestaurantCard({
         </div>
         <span
           className={clsx(
-            "text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full border font-semibold shrink-0",
+            "text-[9px] uppercase tracking-wide px-1.5 py-0.5 rounded-full border font-semibold shrink-0",
             CATEGORY_CHIP[r.hype_category] ?? CATEGORY_CHIP.neutral
           )}
         >
           {r.hype_category}
         </span>
       </div>
-      <div className="mt-2 flex items-center gap-3 text-[11px] text-slate-600 dark:text-slate-400">
+      <div className="mt-2 flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400">
         <span>🔥 {r.mention_count}</span>
-        <span className="text-slate-500">· sentiment {r.avg_sentiment.toFixed(2)}</span>
+        <span className="text-slate-500 truncate">· sent {r.avg_sentiment.toFixed(2)}</span>
         <span className="ml-auto font-semibold text-slate-900 dark:text-slate-200">
           {r.hype_score.toFixed(2)}
         </span>
