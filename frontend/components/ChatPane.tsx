@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, KeyboardEvent } from "react";
+import { useCallback, useEffect, useRef, useState, KeyboardEvent } from "react";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -22,6 +22,16 @@ const WELCOME: ChatMessage = {
     "Hey! I'm **NammaNomNom**, your Bangalore food guide. Ask me things like *\"I'm driving from Yelahanka to Indiranagar, what's good on the way?\"* or *\"underrated coffee in Indiranagar\"*. I'll recommend from real community-loved spots.",
 };
 
+const MIN_DRAWER = 200;
+const DEFAULT_DRAWER = 360;
+const DRAWER_STORAGE_KEY = "nnn-chat-height";
+
+function clampDrawer(n: number) {
+  if (typeof window === "undefined") return Math.max(MIN_DRAWER, n);
+  const max = Math.max(MIN_DRAWER, Math.round(window.innerHeight * 0.8));
+  return Math.min(Math.max(MIN_DRAWER, n), max);
+}
+
 export function ChatPane({
   theme,
   onToggleTheme,
@@ -34,9 +44,59 @@ export function ChatPane({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [drawerHeight, setDrawerHeight] = useState<number>(DEFAULT_DRAWER);
+  const [dragging, setDragging] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const hasUserMessages = messages.some((m) => m.role === "user");
+
+  useEffect(() => {
+    const raw = window.localStorage.getItem(DRAWER_STORAGE_KEY);
+    if (raw) {
+      const n = Number(raw);
+      if (!Number.isNaN(n)) setDrawerHeight(clampDrawer(n));
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(DRAWER_STORAGE_KEY, String(drawerHeight));
+    const onResize = () => setDrawerHeight((h) => clampDrawer(h));
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [drawerHeight]);
+
+  const onResizePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+      setDragging(true);
+      const startY = e.clientY;
+      const startHeight = drawerHeight;
+      const prevSelect = document.body.style.userSelect;
+      const prevCursor = document.body.style.cursor;
+      document.body.style.userSelect = "none";
+      document.body.style.cursor = "ns-resize";
+
+      const onMove = (ev: PointerEvent) => {
+        const delta = ev.clientY - startY; // drag down -> grow
+        setDrawerHeight(clampDrawer(startHeight + delta));
+      };
+      const onUp = () => {
+        setDragging(false);
+        document.body.style.userSelect = prevSelect;
+        document.body.style.cursor = prevCursor;
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", onUp);
+      };
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", onUp);
+    },
+    [drawerHeight]
+  );
+
+  const onResizeDoubleClick = () => setDrawerHeight(DEFAULT_DRAWER);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -167,9 +227,10 @@ export function ChatPane({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18 }}
-            className="mt-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-900/10 dark:border-white/[0.09] shadow-[0_20px_60px_rgba(15,23,42,0.18)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden"
+            style={{ height: drawerHeight }}
+            className="mt-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-900/10 dark:border-white/[0.09] shadow-[0_20px_60px_rgba(15,23,42,0.18)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden flex flex-col"
           >
-            <div className="flex items-center justify-between px-4 py-2 border-b border-slate-900/5 dark:border-white/[0.06]">
+            <div className="shrink-0 flex items-center justify-between px-4 py-2 border-b border-slate-900/5 dark:border-white/[0.06]">
               <span className="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">
                 Conversation
               </span>
@@ -184,7 +245,7 @@ export function ChatPane({
             </div>
             <div
               ref={scrollRef}
-              className="px-4 py-4 space-y-3 max-h-[min(56vh,480px)] overflow-y-auto scrollbar-thin"
+              className="flex-1 min-h-0 px-4 py-4 space-y-3 overflow-y-auto scrollbar-thin"
             >
               {messages.map((m, i) => (
                 <MessageBubble key={i} message={m} />
@@ -208,6 +269,27 @@ export function ChatPane({
                   {error}
                 </div>
               )}
+            </div>
+            <div
+              onPointerDown={onResizePointerDown}
+              onDoubleClick={onResizeDoubleClick}
+              role="separator"
+              aria-orientation="horizontal"
+              aria-label="Resize conversation"
+              title="Drag to resize · double-click to reset"
+              className={clsx(
+                "shrink-0 h-3 w-full cursor-ns-resize flex items-center justify-center group border-t border-slate-900/5 dark:border-white/[0.06]",
+                dragging && "bg-amber-400/10 dark:bg-amber-400/10"
+              )}
+            >
+              <div
+                className={clsx(
+                  "h-1 w-10 rounded-full transition-colors",
+                  dragging
+                    ? "bg-amber-500 dark:bg-amber-400"
+                    : "bg-slate-400/70 dark:bg-slate-600 group-hover:bg-slate-600 dark:group-hover:bg-slate-400"
+                )}
+              />
             </div>
           </motion.div>
         )}
