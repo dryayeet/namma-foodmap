@@ -14,7 +14,7 @@ foodmap/
 
 ## What's in the box
 
-- **Dark Google-Maps-style base tiles** via CartoDB `dark_all`, so labels stay minimal and the heat colors pop.
+- **Dark and light base tiles** via CartoDB `dark_all` / `light_all`, toggleable from the legend. Dark keeps labels muted so heat colors pop; light makes the map feel like a proper daytime guide.
 - **Snap-Map style thermal heatmap** when you're zoomed out. Intensity is driven by hype score, so a street full of trending spots glows white-hot while a solo overhyped place barely tints.
 - **Zoom-aware layers**: below zoom 14 you see only the heatmap, at 14 and above the heatmap disappears and you get per-pin dots. Each pin's size, fill, and glow scale with that restaurant's hype so strong spots visually dominate.
 - **Airbnb/Notion-inspired dark UI**: glass sidebar on the left with filters and a live card list, chat pane on the right, compact legend slotted between them.
@@ -133,7 +133,7 @@ Open <http://localhost:3000>. You'll see a dark map of Bengaluru with a thermal 
 - **Search**: type "biryani", "coffee", "Indiranagar" or anything else into the left pane search. Matches run across name, cuisine, area, dish tags, and the mention snippets themselves.
 - **Filters**: hype category chips (trending / overhyped / underrated / neutral), price tier, and the suggestion chips below the search bar.
 - **Chat (right pane)**: ask route-style questions, or anything like "best underrated cafe in Koramangala". Powered by Claude Haiku 4.5 over OpenRouter, with the full restaurant dataset injected into the system prompt on every request.
-- **Heatmap on/off toggle**: lives in the legend card between the two panes.
+- **Heatmap on/off toggle** and a **light/dark theme toggle** both live in the legend card between the two panes. Theme choice persists via `localStorage`.
 - **Collapse the chat pane**: the `›` button in its header tucks it into a thin tab on the right edge.
 
 ## Refreshing data from Reddit
