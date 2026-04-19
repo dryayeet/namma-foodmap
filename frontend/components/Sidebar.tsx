@@ -127,7 +127,7 @@ export function Sidebar({
   return (
     <aside
       style={{ height }}
-      className="absolute bottom-0 left-0 right-0 z-[1001] flex flex-col bg-white/92 dark:bg-slate-950/92 backdrop-blur-xl border-t border-slate-900/10 dark:border-white/[0.09] shadow-[0_-10px_48px_rgba(15,23,42,0.18)] dark:shadow-[0_-10px_48px_rgba(0,0,0,0.55)]"
+      className="absolute bottom-0 left-0 right-0 z-[1001] flex flex-col bg-white dark:bg-slate-950 border-t border-slate-900/10 dark:border-white/[0.09] shadow-[0_-10px_48px_rgba(15,23,42,0.18)] dark:shadow-[0_-10px_48px_rgba(0,0,0,0.55)]"
     >
       {/* Drag handle */}
       <div

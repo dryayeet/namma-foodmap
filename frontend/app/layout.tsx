@@ -8,18 +8,18 @@ export const metadata: Metadata = {
 };
 
 // Runs before React hydrates, so the page paints in the right theme immediately.
+// Default is light: dark is only applied when the user has explicitly picked it.
 const themeBootstrap = `
   try {
-    var t = localStorage.getItem('nnn-theme');
-    if (t !== 'light') document.documentElement.classList.add('dark');
-  } catch (e) {
-    document.documentElement.classList.add('dark');
-  }
+    if (localStorage.getItem('nnn-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
 `;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <link

@@ -87,7 +87,7 @@ export function ChatPane({
   return (
     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1001] w-[min(760px,calc(100vw-32px))]">
       {/* Brand + pill + actions */}
-      <div className="flex items-center gap-2.5 bg-white/95 dark:bg-slate-950/92 backdrop-blur-xl rounded-full border border-slate-900/10 dark:border-white/[0.09] shadow-[0_10px_36px_rgba(15,23,42,0.14)] dark:shadow-[0_10px_36px_rgba(0,0,0,0.55)] pl-3.5 pr-1.5 py-1.5">
+      <div className="flex items-center gap-2.5 bg-white dark:bg-slate-900 rounded-full border border-slate-900/10 dark:border-white/[0.09] shadow-[0_10px_36px_rgba(15,23,42,0.14)] dark:shadow-[0_10px_36px_rgba(0,0,0,0.55)] pl-3.5 pr-1.5 py-1.5">
         <span className="inline-flex items-center gap-1.5 shrink-0 pr-2 border-r border-slate-900/10 dark:border-white/[0.08]">
           <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-gradient-to-br from-amber-300 to-amber-500 text-slate-950 text-[11px] font-bold shadow-[0_0_14px_rgba(250,204,21,0.4)]">
             ✨
@@ -151,7 +151,7 @@ export function ChatPane({
             <button
               key={s}
               onClick={() => send(s)}
-              className="text-[11px] px-3 py-1.5 rounded-full bg-white/90 dark:bg-slate-950/80 backdrop-blur border border-slate-900/10 dark:border-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-100 shadow-[0_4px_16px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)] transition"
+              className="text-[11px] px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-900/10 dark:border-white/[0.09] text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white shadow-[0_4px_16px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)] transition"
             >
               {s}
             </button>
@@ -167,7 +167,7 @@ export function ChatPane({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18 }}
-            className="mt-3 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-900/10 dark:border-white/[0.09] shadow-[0_20px_60px_rgba(15,23,42,0.18)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden"
+            className="mt-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-900/10 dark:border-white/[0.09] shadow-[0_20px_60px_rgba(15,23,42,0.18)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden"
           >
             <div className="flex items-center justify-between px-4 py-2 border-b border-slate-900/5 dark:border-white/[0.06]">
               <span className="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">

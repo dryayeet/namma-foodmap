@@ -28,7 +28,7 @@ export function HypeLegend({
     <div className="absolute right-4 top-24 z-[1000] flex flex-col items-end gap-2">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-10 h-10 rounded-full bg-white/92 dark:bg-slate-950/92 backdrop-blur-xl border border-slate-900/10 dark:border-white/[0.09] shadow-[0_8px_24px_rgba(15,23,42,0.14)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.5)] flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-900 transition"
+        className="w-10 h-10 rounded-full bg-white dark:bg-slate-900 border border-slate-900/10 dark:border-white/[0.09] shadow-[0_8px_24px_rgba(15,23,42,0.14)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.5)] flex items-center justify-center text-slate-700 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
         aria-label="Legend"
         title="Legend"
       >
@@ -38,10 +38,10 @@ export function HypeLegend({
       <button
         onClick={onToggleHeatmap}
         className={clsx(
-          "w-10 h-10 rounded-full border backdrop-blur-xl flex items-center justify-center transition shadow-[0_8px_24px_rgba(15,23,42,0.14)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.5)]",
+          "w-10 h-10 rounded-full border flex items-center justify-center transition shadow-[0_8px_24px_rgba(15,23,42,0.14)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.5)]",
           showHeatmap
             ? "bg-amber-500 text-white border-amber-500 dark:bg-amber-400 dark:text-slate-950 dark:border-amber-400"
-            : "bg-white/92 dark:bg-slate-950/92 text-slate-700 dark:text-slate-200 border-slate-900/10 dark:border-white/[0.09] hover:bg-white dark:hover:bg-slate-900"
+            : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-100 border-slate-900/10 dark:border-white/[0.09] hover:bg-slate-50 dark:hover:bg-slate-800"
         )}
         aria-label={showHeatmap ? "Hide heatmap" : "Show heatmap"}
         title={showHeatmap ? "Heatmap on" : "Heatmap off"}
@@ -56,7 +56,7 @@ export function HypeLegend({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 8 }}
             transition={{ duration: 0.16 }}
-            className="w-64 rounded-xl bg-white/95 dark:bg-slate-950/92 backdrop-blur-xl border border-slate-900/10 dark:border-white/[0.09] shadow-[0_10px_36px_rgba(15,23,42,0.18)] dark:shadow-[0_10px_36px_rgba(0,0,0,0.55)] p-3.5 text-xs space-y-3"
+            className="w-64 rounded-xl bg-white dark:bg-slate-900 border border-slate-900/10 dark:border-white/[0.09] shadow-[0_10px_36px_rgba(15,23,42,0.18)] dark:shadow-[0_10px_36px_rgba(0,0,0,0.55)] p-3.5 text-xs space-y-3"
           >
             <div>
               <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1.5">

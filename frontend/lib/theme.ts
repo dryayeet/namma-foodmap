@@ -7,10 +7,10 @@ export type Theme = "light" | "dark";
 const STORAGE_KEY = "nnn-theme";
 
 function readInitial(): Theme {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
   const stored = window.localStorage.getItem(STORAGE_KEY);
   if (stored === "light" || stored === "dark") return stored;
-  return "dark";
+  return "light";
 }
 
 function apply(theme: Theme) {
@@ -20,7 +20,7 @@ function apply(theme: Theme) {
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
     const t = readInitial();
